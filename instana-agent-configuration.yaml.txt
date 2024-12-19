@@ -1,0 +1,23 @@
+[root@itzvsi-6620020aow-2ptg71vb emqx1_data]# cat /opt/instana/agent/etc/instana/configuration.yaml | grep -v ^# | grep -v ^$
+com.instana.plugin.generic.hardware:
+  enabled: true # disabled by default
+  availability-zone: 'RocketMQ '
+com.instana.plugin.rocketmq:
+  enabled: true
+  poll_rate: 60
+  nameServerClusters:
+    - namesrvAddr: '10.88.0.1:9876' # Name server IP:port (required)
+      availabilityZone: 'rocketmqzone'
+      enableACL: false # Whether enable access control. Default is false
+      accessKey: 'RocketMQ' # The accessKey is used to verify the identity of the user
+      secretKey: '12345678' # The secretKey is used to encrypt and verify the signature string
+com.instana.plugin.javatrace:
+  instrumentation:
+    enabled: true
+    sdk:
+      packages:
+        - 'com.instana.backend'
+        - 'com.instana.frontend'
+        - 'com.example.svc_a'
+com.instana.plugin.opentelemetry:
+ enabled: true

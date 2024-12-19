@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rocketmq-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rocketmq-dashboard
+  template:
+    metadata:
+      labels:
+        app: rocketmq-dashboard
+    spec:
+      containers:
+      - name: rocketmq-dashboard
+        image: apacherocketmq/rocketmq-dashboard:latest
+        env:
+        - name: JAVA_OPTS
+          value: "-Drocketmq.namesrv.addr=rocketmq-demo-nameserver:9876"
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rocketmq-dashboard
+spec:
+  selector:
+    app: rocketmq-dashboard
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: rocketmq-dashboard
+spec:
+  to:
+    kind: Service
+    name: rocketmq-dashboard
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge
