@@ -1,0 +1,16 @@
+export APP_NAME=my_gateway
+export SERVER_PORT=9090
+export ROUTE_0_ID=my_example_route
+export ROUTE_0_URI=http://myhttpbin.org
+export ROUTE_0_PREDICATE=Path=/myanything
+export ROUTE_1_ID=my_svc_a
+export ROUTE_1_URI=http://my-svc-a:8080
+export ROUTE_1_PREDICATE=Path=/my_svc_a/**
+export ROUTE_2_ID=my_svc_b
+export ROUTE_2_URI=http://my-svc-b:8080
+export ROUTE_2_PREDICATE=Path=/my_svc_b/**
+
+export SPRING_JMX_ENABLED=true
+export MANAGEMENT_ENDPOINTS_JMX_EXPOSURE_INCLUDE=env,health,info,metrics
+export MANAGEMENT_ENDPOINT_ENV_SHOW_VALUES=ALWAYS
+

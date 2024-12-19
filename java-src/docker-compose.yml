@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  gateway:
+    image: docker.io/milesji/spring-cloud-gateway  # Replace with the actual image name for the gateway
+    # build:
+    #   context: ./gateway  # Adjust to your Gateway directory
+    #   dockerfile: Dockerfile
+    environment:
+    #   - APP_NAME=gateway
+    #   - JMX_ENABLED=true
+    #   - SERVER_PORT=8080
+      - ROUTE_0_ID=example_route
+      - ROUTE_0_URI=http://httpbin.org
+      - ROUTE_0_PREDICATE=Path=/anything
+      - ROUTE_1_ID=svc_a
+      - ROUTE_1_URI=http://10.23.33.7:8081
+      - ROUTE_1_PREDICATE=Path=/svca/**
+      - ROUTE_2_ID=svc_b
+      - ROUTE_2_URI=http://10.23.33.7:8082
+      - ROUTE_2_PREDICATE=Path=/svcb/**
+    ports:
+      - "8080:8080"  # Expose the gateway port
+
+  svc_a:
+    image: docker.io/milesji/svc_a   # Replace with the actual image name for Svc A
+    # build:
+    #   context: ./svc_a  # Adjust to your Svc A directory
+    #   dockerfile: Dockerfile
+    environment:
+      - MQTT_BROKER_HOST=10.23.33.7
+      - MQTT_BROKER_PORT=1883
+      - MQTT_TOPIC=pollingResults
+      - SVC_B_URL=http://10.23.33.7
+      - SVC_B_PORT=8082
+      - POLL_INTERVAL=500000
+      - TASK_ID=defaultTaskId
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://10.88.0.1
+      - OTEL_EXPORTER_OTLP_PORT=4317
+    ports:
+      - "8081:8080"  # Expose the port on which Svc A runs
+
+  svc_b:
+    image: docker.io/milesji/svc_b  # Replace with the actual image name for Svc B
+    # build:
+    #   context: ./svc_b  # Adjust to your Svc B directory
+    #   dockerfile: Dockerfile
+    # environment:
+    #   - SVC_B_PORT=8080
+    ports:
+      - "8082:8080"  # Expose the port on which Svc B runs
